@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASHA Worker Dashboard - ArogyaBandhu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-teal-600 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-heartbeat text-white text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold">ArogyaBandhu</h1>
+                    <p class="text-xs opacity-75">ASHA Worker Dashboard</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="text-right">
+                    <div class="text-sm" id="userName">Loading...</div>
+                    <div class="text-xs opacity-75">ASHA Worker</div>
+                </div>
+                <button onclick="logout()" class="bg-teal-700 px-3 py-1 rounded-lg text-sm hover:bg-teal-800 transition">
+                    <i class="fas fa-sign-out-alt mr-1"></i>Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Quick Actions -->
+    <div class="bg-white shadow-sm border-b">
+        <div class="container mx-auto p-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <button onclick="showSection('vaccination')" class="bg-teal-100 text-teal-700 p-3 rounded-lg hover:bg-teal-200 transition text-center">
+                    <i class="fas fa-syringe text-xl mb-1 block"></i>
+                    <span class="text-xs">Vaccination</span>
+                </button>
+                <button onclick="showSection('surveys')" class="bg-green-100 text-green-700 p-3 rounded-lg hover:bg-green-200 transition text-center">
+                    <i class="fas fa-clipboard-list text-xl mb-1 block"></i>
+                    <span class="text-xs">Surveys</span>
+                </button>
+                <button onclick="showSection('awareness')" class="bg-purple-100 text-purple-700 p-3 rounded-lg hover:bg-purple-200 transition text-center">
+                    <i class="fas fa-bullhorn text-xl mb-1 block"></i>
+                    <span class="text-xs">Awareness</span>
+                </button>
+                <button onclick="showSection('reports')" class="bg-orange-100 text-orange-700 p-3 rounded-lg hover:bg-orange-200 transition text-center">
+                    <i class="fas fa-chart-bar text-xl mb-1 block"></i>
+                    <span class="text-xs">Reports</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container mx-auto p-4">
+        <!-- ASHA Overview -->
+        <section id="asha-overview" class="mb-6">
+            <h2 class="text-xl font-bold mb-4 text-gray-800">
+                <i class="fas fa-user-nurse mr-2 text-teal-600"></i>
+                Field Work Overview
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">Assigned Families</p>
+                            <p class="text-xl font-bold text-gray-800">45</p>
+                        </div>
+                        <i class="fas fa-home text-3xl text-teal-500"></i>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">This Month Visits</p>
+                            <p class="text-xl font-bold text-gray-800">128</p>
+                        </div>
+                        <i class="fas fa-walking text-3xl text-green-500"></i>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">Vaccinations</p>
+                            <p class="text-xl font-bold text-gray-800">23</p>
+                        </div>
+                        <i class="fas fa-syringe text-3xl text-purple-500"></i>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">Pending Tasks</p>
+                            <p class="text-xl font-bold text-gray-800">7</p>
+                        </div>
+                        <i class="fas fa-tasks text-3xl text-orange-500"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Vaccination Section -->
+        <section id="vaccination" class="content-section mb-6">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold text-gray-700">
+                        <i class="fas fa-syringe mr-2"></i>
+                        Vaccination Drive
+                    </h3>
+                    <button onclick="addVaccination()" class="bg-teal-500 text-white px-4 py-2 rounded-lg hover:bg-teal-600 transition text-sm">
+                        <i class="fas fa-plus mr-2"></i>Record Vaccination
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                        <h4 class="font-semibold text-blue-700 mb-2">Today's Schedule</h4>
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm">BCG Vaccination</span>
+                                <span class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">3 children</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm">Hepatitis B</span>
+                                <span class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">5 children</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm">Polio Drops</span>
+                                <span class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">8 children</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                        <h4 class="font-semibold text-green-700 mb-2">Vaccination Coverage</h4>
+                        <div class="space-y-3">
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span>BCG</span>
+                                    <span>85%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-green-500 h-2 rounded-full" style="width: 85%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span>DPT</span>
+                                    <span>72%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-green-500 h-2 rounded-full" style="width: 72%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span>Polio</span>
+                                    <span>90%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-green-500 h-2 rounded-full" style="width: 90%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="vaccinationList" class="space-y-3">
+                    <!-- Vaccination records will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Surveys Section -->
+        <section id="surveys" class="content-section hidden mb-6">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold text-gray-700">
+                        <i class="fas fa-clipboard-list mr-2"></i>
+                        Health Surveys
+                    </h3>
+                    <button onclick="createSurvey()" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition text-sm">
+                        <i class="fas fa-plus mr-2"></i>New Survey
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div class="border rounded-lg p-4 hover:shadow-md transition cursor-pointer" onclick="startSurvey('maternal')">
+                        <div class="text-center">
+                            <i class="fas fa-baby text-3xl text-pink-500 mb-2"></i>
+                            <h4 class="font-semibold">Maternal Health</h4>
+                            <p class="text-sm text-gray-600">Pregnant women survey</p>
+                            <div class="mt-2">
+                                <span class="text-xs bg-pink-100 text-pink-700 px-2 py-1 rounded">12 pending</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="border rounded-lg p-4 hover:shadow-md transition cursor-pointer" onclick="startSurvey('child')">
+                        <div class="text-center">
+                            <i class="fas fa-child text-3xl text-blue-500 mb-2"></i>
+                            <h4 class="font-semibold">Child Health</h4>
+                            <p class="text-sm text-gray-600">0-5 years assessment</p>
+                            <div class="mt-2">
+                                <span class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">8 pending</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="border rounded-lg p-4 hover:shadow-md transition cursor-pointer" onclick="startSurvey('general')">
+                        <div class="text-center">
+                            <i class="fas fa-users text-3xl text-green-500 mb-2"></i>
+                            <h4 class="font-semibold">General Health</h4>
+                            <p class="text-sm text-gray-600">Family health check</p>
+                            <div class="mt-2">
+                                <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">5 pending</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="surveysList" class="space-y-3">
+                    <!-- Survey records will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Awareness Section -->
+        <section id="awareness" class="content-section hidden mb-6">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold text-gray-700">
+                        <i class="fas fa-bullhorn mr-2"></i>
+                        Health Awareness Activities
+                    </h3>
+                    <button onclick="planAwareness()" class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition text-sm">
+                        <i class="fas fa-plus mr-2"></i>Plan Activity
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <h4 class="font-semibold mb-3">Upcoming Camps</h4>
+                        <div class="space-y-3">
+                            <div class="border rounded-lg p-3">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h5 class="font-medium">Nutrition Camp</h5>
+                                        <p class="text-sm text-gray-600">Tomorrow, 10:00 AM</p>
+                                        <p class="text-sm">Village Community Center</p>
+                                    </div>
+                                    <span class="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded">Planned</span>
+                                </div>
+                            </div>
+                            <div class="border rounded-lg p-3">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h5 class="font-medium">Sanitation Drive</h5>
+                                        <p class="text-sm text-gray-600">Dec 25, 2:00 PM</p>
+                                        <p class="text-sm">Main Market Area</p>
+                                    </div>
+                                    <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Approved</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-semibold mb-3">Awareness Topics</h4>
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
+                                <span class="text-sm">Hand Washing</span>
+                                <button onclick="shareAwareness('handwashing')" class="text-blue-500 hover:text-blue-700">
+                                    <i class="fas fa-share"></i>
+                                </button>
+                            </div>
+                            <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
+                                <span class="text-sm">Nutrition</span>
+                                <button onclick="shareAwareness('nutrition')" class="text-blue-500 hover:text-blue-700">
+                                    <i class="fas fa-share"></i>
+                                </button>
+                            </div>
+                            <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
+                                <span class="text-sm">Family Planning</span>
+                                <button onclick="shareAwareness('family')" class="text-blue-500 hover:text-blue-700">
+                                    <i class="fas fa-share"></i>
+                                </button>
+                            </div>
+                            <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
+                                <span class="text-sm">Immunization</span>
+                                <button onclick="shareAwareness('immunization')" class="text-blue-500 hover:text-blue-700">
+                                    <i class="fas fa-share"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reports Section -->
+        <section id="reports" class="content-section hidden mb-6">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">
+                    <i class="fas fa-chart-bar mr-2"></i>
+                    Monthly Reports
+                </h3>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-medium mb-3">Field Activities</h4>
+                        <canvas id="activitiesChart" width="400" height="200"></canvas>
+                    </div>
+                    <div>
+                        <h4 class="font-medium mb-3">Health Indicators</h4>
+                        <canvas id="healthChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+                
+                <div class="mt-6">
+                    <h4 class="font-medium mb-3">Summary Statistics</h4>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="text-center p-4 bg-gray-50 rounded-lg">
+                            <div class="text-2xl font-bold text-teal-600">245</div>
+                            <div class="text-sm text-gray-600">Home Visits</div>
+                        </div>
+                        <div class="text-center p-4 bg-gray-50 rounded-lg">
+                            <div class="text-2xl font-bold text-green-600">89</div>
+                            <div class="text-sm text-gray-600">Vaccinations</div>
+                        </div>
+                        <div class="text-center p-4 bg-gray-50 rounded-lg">
+                            <div class="text-2xl font-bold text-purple-600">156</div>
+                            <div class="text-sm text-gray-600">Surveys Done</div>
+                        </div>
+                        <div class="text-center p-4 bg-gray-50 rounded-lg">
+                            <div class="text-2xl font-bold text-orange-600">12</div>
+                            <div class="text-sm text-gray-600">Awareness Camps</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Vaccination Modal -->
+    <div id="vaccinationModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg max-w-md w-full p-6">
+            <h3 class="text-xl font-bold mb-4">Record Vaccination</h3>
+            <div class="space-y-4">
+                <input type="text" id="childName" placeholder="Child Name" class="w-full p-2 border rounded-lg">
+                <input type="text" id="parentName" placeholder="Parent/Guardian Name" class="w-full p-2 border rounded-lg">
+                <input type="date" id="vaccinationDate" class="w-full p-2 border rounded-lg">
+                <select id="vaccineType" class="w-full p-2 border rounded-lg">
+                    <option value="">Select Vaccine</option>
+                    <option value="bcg">BCG</option>
+                    <option value="hepb">Hepatitis B</option>
+                    <option value="dpt">DPT</option>
+                    <option value="polio">Polio</option>
+                    <option value="mmr">MMR</option>
+                </select>
+                <input type="text" id="vaccinationLocation" placeholder="Location" class="w-full p-2 border rounded-lg">
+                
+                <div class="flex gap-2">
+                    <button onclick="saveVaccination()" class="bg-teal-500 text-white px-4 py-2 rounded-lg hover:bg-teal-600 transition">
+                        Save
+                    </button>
+                    <button onclick="closeVaccinationModal()" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="asha-dashboard.js"></script>
+</body>
+</html>

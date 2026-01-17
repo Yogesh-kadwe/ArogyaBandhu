@@ -1,0 +1,160 @@
+{
+  "name": "ArogyaBandhu Health",
+  "short_name": "ArogyaBandhu",
+  "description": "Comprehensive rural healthcare ecosystem with real-time monitoring and offline support",
+  "start_url": "/index-3d-enhanced.html",
+  "display": "standalone",
+  "background_color": "#10b981",
+  "theme_color": "#10b981",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["health", "medical", "lifestyle"],
+  "icons": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0nIHN2ZyB2aWQ9IjI2NCIgeG1sPSJodHRwOi8vd3dudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMjQgMjQiIHhtbG5zPSJodHRwOi8vd3dudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjMTBiOTgxIi8+PHBhdGggZD0iTTEwIDEwIEw0IDI0eiIgZmlsbD0iIzEwYjk4MSIvPjxwYXRoIGQ9Ik0xMiA2IEwxMiA2YzYuNjI3IDYuNjcgMCAxMi0xMi0xMloiIGZpbGw9IiNmZmZmZmYiLz48L3N2Zz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dyMy5vcmcvLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGQ9Ik0xMiA0QzYuNjI3IDYuNjcgMCAxMi0xMi0xMloiIGZpbGw9IiNmZmZmZmYiLz48L3N2Zz4=",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0nIHN2ZyB2aWQ9IjI2NCIgeG1sPSJodHRwOi8vd3dudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMjQgMjQiIHhtbG5zPSJodHRwOi8vd3dudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjMTBiOTgxIi8+PHBhdGggZD0iTTEwIDEwIEw0IDI0eiIgZmlsbD0iIzEwYjk4MSIvPjxwYXRoIGQ9Ik0xMiA2IEwxMiA2YzYuNjI3IDYuNjcgMCAxMi0xMi0xMloiIGZpbGw9IiNmZmZmZmYiLz48L3N2Zz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dyMy5vcmcvLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGQ9Ik0xMiA0QzYuNjI3IDYuNjcgMCAxMi0xMi0xMloiIGZpbGw9IiNmZmZmZmYiLz48L3N2Zz4=",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Emergency SOS",
+      "short_name": "SOS",
+      "description": "Quick emergency access",
+      "url": "/patient-dashboard.html?section=emergency",
+      "icons": [
+        {
+          "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0nIHN2ZyB2aWQ9IjI2NCIgeG1sPSJodHRwOi8vd3dudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMjQgMjQiIHhtbG5zPSJodHRwOi8vd3dudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZWY0MDAwIi8+PHBhdGggZD0iTTEwIDQgTDAgMjR6IiBmaWxsPSIjZWY0MDAwIi8+PC9zdmc+",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Book Appointment",
+      "short_name": "Appointment",
+      "description": "Schedule doctor visit",
+      "url": "/patient-dashboard.html?section=appointments",
+      "icons": [
+        {
+          "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0nIHN2ZyB2aWQ9IjI2NCIgeG1sPSJodHRwOi8vd3dudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMjQgMjQiIHhtbG5zPSJodHRwOi8vd3dudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjM2I4MmY2Ii8+PHBhdGggZD0iTTEwIDQgTDAgMjR6IiBmaWxsPSIjM2I4MmY2Ii8+PC9zdmc+",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0nIHN2ZyB2aWQ9IjI4MDAiIGhlaWdodD0iNjAwIiB2aWV3Qm94PSIwIDAgODAwIDEyMDAiPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSI4MDAiIGhlaWdodD0iMTIwMCIgZmlsbD0iI2Y5ZmFmYiLz48dGV4dCB4PSI1MDAiIHk9IjYwMCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjI4IiBmaWxsPSIjMWYyOTYxIj5Bcm9neWFCYW5kaHU8L3RleHQ+PC9zdmc+",
+      "sizes": "1280x720",
+      "type": "image/svg+xml",
+      "form_factor": "wide",
+      "label": "Dashboard View"
+    },
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0nIHN2ZyB2aWQ9IjM2NjAiIGhlaWdodD0iNjQwIiB2aWV3Qm94PSIwIDAgNjQwIDk2MCI+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjM2NjAiIGhlaWdodD0iOTYwIiBmaWxsPSIjZjlmYWZiIi8+PHRleHQgeD0iMTgwIiB5PSI0ODAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzFmMjk2MSI+QXJvZ3lhQmFuZGh1PC9UZXh0+PC9zdmc+",
+      "sizes": "640x960",
+      "type": "image/svg+xml",
+      "form_factor": "narrow",
+      "label": "Mobile View"
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "launch_handler": {
+    "client_mode": ["navigate-existing", "focus-existing"]
+  },
+  "handle_links": "preferred",
+  "capture_links": "existing-client-navigate",
+  "display_override": {
+    "standalone": "standalone",
+    "minimal-ui": "minimal-ui",
+    "fullscreen": "fullscreen"
+  },
+  "protocol_handlers": [
+    {
+      "protocol": "web+arogyabandhu",
+      "url": "/patient-dashboard.html?handle=%s"
+    }
+  ],
+  "file_handlers": [
+    {
+      "action": "open",
+      "accept": {
+        "medical_records": ".json,.xml"
+      }
+    }
+  ],
+  "share_target": {
+    "action": "share-handler",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "ArogyaBandhu Health Record",
+      "text": "Share health data",
+      "url": "https://arogyabandhu.health/share",
+      "files": [
+        {
+          "name": "health_record",
+          "accept": [".json", ".xml", ".csv"]
+        }
+      ]
+    }
+  },
+  "share_handler": {
+    "action": "share-health-data",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "ArogyaBandhu Health Data",
+      "text": "Import health records",
+      "url": "/import-health-data",
+      "files": [
+        {
+          "name": "health_records",
+          "accept": [".json", ".xml", ".csv"]
+        }
+      ]
+    }
+  },
+  "background": {
+    "service_worker": "/sw-enhanced.js",
+    "type": "module"
+  },
+  "offline_enabled": true,
+  "storage": {
+    "managed_schema": "managed_storage_schema.json"
+  },
+  "permissions": {
+    "storage": {
+      "description": "Store health data and preferences"
+    },
+    "geolocation": {
+      "description": "Access location for nearby healthcare services"
+    },
+    "notifications": {
+      "description": "Send health alerts and reminders"
+    },
+    "camera": {
+      "description": "Capture medical documents and symptoms"
+    },
+    "microphone": {
+      "description": "Voice input for symptom description"
+    }
+  },
+  "privacy_policy": "https://arogyabandhu.health/privacy",
+  "developer": {
+    "name": "ArogyaBandhu Health Team",
+    "url": "https://arogyabandhu.health"
+  }
+}

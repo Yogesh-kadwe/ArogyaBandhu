@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArogyaBandhu - Smart Healthcare Platform</title>
+    <meta name="description" content="AI-powered healthcare platform for modern health management">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4F46E5">
+    
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch(registrationError => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+    </script>
+    
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .material-shadow {
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .material-shadow:hover {
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+        }
+        
+        .material-card {
+            background: white;
+            border-radius: 16px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .material-card:hover {
+            transform: translateY(-4px);
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .health-gradient {
+            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+        }
+        
+        .success-gradient {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+        }
+        
+        .warning-gradient {
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+        }
+        
+        .error-gradient {
+            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .slide-up {
+            animation: slideUp 0.4s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+        
+        .pulse-dot {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        .nav-item {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .nav-item:hover::before {
+            transform: translateX(0);
+        }
+        
+        .metric-card {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .metric-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-30px, -30px) rotate(180deg); }
+        }
+        
+        .hidden { display: none !important; }
+        .show { display: block !important; }
+    </style>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Offline Banner -->
+    <div id="offlineBanner" class="fixed top-0 left-0 right-0 bg-yellow-500 text-white px-4 py-3 text-center z-50 slide-up" style="display: none;">
+        <i class="fas fa-wifi-slash mr-2"></i>
+        <span class="font-medium">You're offline. Using cached data.</span>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-heartbeat text-white text-lg"></i>
+                        </div>
+                    </div>
+                    <div class="ml-4">
+                        <h1 class="text-xl font-semibold text-gray-900">ArogyaBandhu</h1>
+                        <p class="text-xs text-gray-500">Smart Healthcare Platform</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button onclick="toggleLanguage()" class="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+                        <i class="fas fa-language text-gray-600"></i>
+                    </button>
+                    <button onclick="toggleTheme()" class="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+                        <i class="fas fa-moon text-gray-600"></i>
+                    </button>
+                    <div class="relative">
+                        <button class="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+                            <i class="fas fa-bell text-gray-600"></i>
+                            <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full pulse-dot"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Emergency SOS Button -->
+    <div class="fixed bottom-6 right-6 z-50">
+        <button onclick="showEmergencyMode()" class="w-14 h-14 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110 flex items-center justify-center">
+            <i class="fas fa-phone-alt text-lg"></i>
+        </button>
+    </div>
+
+    <!-- Main Navigation -->
+    <nav class="bg-white border-b border-gray-200 sticky top-16 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex space-x-8 overflow-x-auto py-3">
+                <button onclick="showSection('dashboard')" class="nav-item px-4 py-2 rounded-lg text-sm font-medium text-indigo-600 bg-indigo-50 whitespace-nowrap">
+                    <i class="fas fa-home mr-2"></i>Dashboard
+                </button>
+                <button onclick="showSection('health-assistant')" class="nav-item px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 whitespace-nowrap">
+                    <i class="fas fa-robot mr-2"></i>AI Assistant
+                </button>
+                <button onclick="showSection('maternal-health')" class="nav-item px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 whitespace-nowrap">
+                    <i class="fas fa-baby mr-2"></i>Maternal Health
+                </button>
+                <button onclick="showSection('blood-donor')" class="nav-item px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 whitespace-nowrap">
+                    <i class="fas fa-hand-holding-heart mr-2"></i>Blood Donor
+                </button>
+                <button onclick="showSection('emergency-sos')" class="nav-item px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 whitespace-nowrap">
+                    <i class="fas fa-exclamation-triangle mr-2"></i>Emergency SOS
+                </button>
+                <button onclick="showSection('appointment')" class="nav-item px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 whitespace-nowrap">
+                    <i class="fas fa-calendar-check mr-2"></i>Appointments
+                </button>
+                <button onclick="showSection('doctor-finder')" class="nav-item px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 whitespace-nowrap">
+                    <i class="fas fa-user-md mr-2"></i>Find Doctor
+                </button>
+                <button onclick="showSection('medicine')" class="nav-item px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 whitespace-nowrap">
+                    <i class="fas fa-pills mr-2"></i>Medicines
+                </button>
+                <button onclick="showSection('records')" class="nav-item px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 whitespace-nowrap">
+                    <i class="fas fa-folder-open mr-2"></i>Health Records
+                </button>
+                <button onclick="showSection('schemes')" class="nav-item px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 whitespace-nowrap">
+                    <i class="fas fa-hand-holding-heart mr-2"></i>Schemes
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="content-section fade-in">
+            <!-- Welcome Header -->
+            <div class="mb-8">
+                <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl p-8 text-white">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-3xl font-bold mb-2">Welcome back!</h2>
+                            <p class="text-indigo-100">Your health dashboard for today</p>
+                            <div class="mt-4 flex items-center space-x-6">
+                                <div class="flex items-center">
+                                    <i class="fas fa-calendar-alt mr-2"></i>
+                                    <span class="text-sm" id="currentDate"></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-clock mr-2"></i>
+                                    <span class="text-sm" id="currentTime"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hidden lg:block">
+                            <div class="w-32 h-32 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-heartbeat text-5xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="material-card material-shadow p-6 metric-card">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Health Score</p>
+                            <p class="text-2xl font-bold text-gray-900">85%</p>
+                            <p class="text-xs text-green-600 mt-1">+5% from last week</p>
+                        </div>
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-heart text-green-600"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="material-card material-shadow p-6 metric-card">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Steps Today</p>
+                            <p class="text-2xl font-bold text-gray-900" id="stepCount">0</p>
+                            <p class="text-xs text-blue-600 mt-1">Goal: 10,000</p>
+                        </div>
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-walking text-blue-600"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="material-card material-shadow p-6 metric-card">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Water Intake</p>
+                            <p class="text-2xl font-bold text-gray-900" id="waterCount">0</p>
+                            <p class="text-xs text-cyan-600 mt-1">Goal: 8 glasses</p>
+                        </div>
+                        <div class="w-12 h-12 bg-cyan-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-tint text-cyan-600"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="material-card material-shadow p-6 metric-card">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">BMI</p>
+                            <p class="text-2xl font-bold text-gray-900" id="bmiDisplay">--</p>
+                            <p class="text-xs text-purple-600 mt-1">Calculate now</p>
+                        </div>
+                        <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-weight text-purple-600"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Health Tools -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- BMI Calculator -->
+                <div class="material-card material-shadow p-6">
+                    <div class="flex items-center mb-6">
+                        <div class="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-calculator text-indigo-600"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900">BMI Calculator</h3>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Weight (kg)</label>
+                            <input type="number" id="weight" placeholder="Enter weight" 
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Height (cm)</label>
+                            <input type="number" id="height" placeholder="Enter height" 
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200">
+                        </div>
+                        <button onclick="calculateBMI()" 
+                                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg transition-colors duration-200 font-medium">
+                            Calculate BMI
+                        </button>
+                        <div id="bmiResult" class="mt-4 p-4 bg-gray-50 rounded-lg hidden">
+                            <p class="text-center font-semibold text-gray-900"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Water Tracker -->
+                <div class="material-card material-shadow p-6">
+                    <div class="flex items-center mb-6">
+                        <div class="w-10 h-10 bg-cyan-100 rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-tint text-cyan-600"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900">Water Tracker</h3>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="text-center">
+                            <div class="text-4xl font-bold text-gray-900 mb-2" id="waterCount">0</div>
+                            <div class="text-sm text-gray-600">glasses today</div>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div id="waterProgress" class="bg-cyan-500 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="addWater()" 
+                                    class="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white py-2 px-4 rounded-lg transition-colors duration-200 font-medium">
+                                <i class="fas fa-plus mr-2"></i>Add Glass
+                            </button>
+                            <button onclick="resetWaterTracker()" 
+                                    class="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded-lg transition-colors duration-200">
+                                <i class="fas fa-redo mr-2"></i>Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step Counter -->
+                <div class="material-card material-shadow p-6">
+                    <div class="flex items-center mb-6">
+                        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-walking text-green-600"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900">Step Counter</h3>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="text-center">
+                            <div class="text-4xl font-bold text-gray-900 mb-2" id="stepCount">0</div>
+                            <div class="text-sm text-gray-600">steps today</div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Enter steps</label>
+                            <div class="flex space-x-2">
+                                <input type="number" id="steps" placeholder="0" 
+                                       class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200">
+                                <button onclick="updateSteps()" 
+                                        class="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg transition-colors duration-200">
+                                    Update
+                                </button>
+                                <button onclick="resetStepCounter()" 
+                                        class="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded-lg transition-colors duration-200">
+                                    <i class="fas fa-redo"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Maternal Health Registry Section -->
+        <section id="maternal-health" class="content-section hidden">
+            <div class="bg-gradient-to-br from-pink-50 to-purple-100 rounded-2xl shadow-xl p-8 border border-pink-200">
+                <div class="text-center mb-8">
+                    <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full mb-4 shadow-lg transform hover:scale-110 transition-transform duration-300">
+                        <i class="fas fa-baby text-3xl text-white"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold mb-2 bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
+                        Maternal Health Registry
+                    </h2>
+                    <p class="text-gray-600">Track and manage maternal health records</p>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                    <h3 class="text-xl font-semibold mb-6 text-center text-gray-800 flex items-center justify-center">
+                        <i class="fas fa-user-nurse mr-3 text-pink-500"></i>
+                        Register for Maternal Care
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input type="text" id="motherName" placeholder="Mother's Name" class="p-3 border border-pink-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent">
+                        <input type="number" id="motherAge" placeholder="Age" class="p-3 border border-pink-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent">
+                        <input type="date" id="lmpDate" placeholder="Last Menstrual Period" class="p-3 border border-pink-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent">
+                        <input type="tel" id="motherPhone" placeholder="Phone Number" class="p-3 border border-pink-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent">
+                        <select id="bloodGroup" class="p-3 border border-pink-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent">
+                            <option value="">Select Blood Group</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                        </select>
+                        <input type="text" id="hospitalName" placeholder="Hospital Name" class="p-3 border border-pink-200 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent">
+                    </div>
+                    <button onclick="registerMaternalHealth()" class="w-full mt-6 bg-gradient-to-r from-pink-500 to-purple-600 text-white py-3 rounded-lg hover:from-pink-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-[1.02] shadow-xl font-semibold">
+                        <i class="fas fa-save mr-2"></i>Register for Maternal Care
+                    </button>
+                </div>
+                
+                <div id="maternalRecords" class="mt-6">
+                    <div class="text-center text-gray-500 py-8">
+                        <i class="fas fa-baby text-4xl mb-3"></i>
+                        <p>No maternal health records found</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Blood Donor Finder Section -->
+        <section id="blood-donor" class="content-section hidden">
+            <div class="bg-gradient-to-br from-red-50 to-pink-100 rounded-2xl shadow-xl p-8 border border-red-200">
+                <div class="text-center mb-8">
+                    <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-red-500 to-pink-600 rounded-full mb-4 shadow-lg transform hover:scale-110 transition-transform duration-300">
+                        <i class="fas fa-hand-holding-heart text-3xl text-white"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold mb-2 bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
+                        Blood Donor Finder
+                    </h2>
+                    <p class="text-gray-600">Find nearby blood donors using Google Maps</p>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                    <h3 class="text-xl font-semibold mb-6 text-center text-gray-800 flex items-center justify-center">
+                        <i class="fas fa-search-location mr-3 text-red-500"></i>
+                        Search for Blood Donors
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <select id="donorBloodGroup" class="p-3 border border-red-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                            <option value="">Select Blood Group</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                        </select>
+                        <input type="text" id="donorLocation" placeholder="Enter your location" class="p-3 border border-red-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                        <button onclick="findBloodDonors()" class="bg-red-500 text-white px-6 py-3 rounded-lg hover:bg-red-600 transition-all duration-300 transform hover:scale-105">
+                            <i class="fas fa-search mr-2"></i>Search Donors
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="donorResults" class="mt-6">
+                    <div class="text-center text-gray-500 py-8">
+                        <i class="fas fa-hand-holding-heart text-4xl mb-3"></i>
+                        <p>Search for nearby blood donors</p>
+                    </div>
+                </div>
+                
+                <div id="donorMap" class="mt-6 h-96 bg-gray-100 rounded-lg flex items-center justify-center">
+                    <div class="text-center">
+                        <i class="fas fa-map-marked-alt text-4xl text-gray-400 mb-3"></i>
+                        <p class="text-gray-500">Map will appear here after search</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Emergency SOS Section -->
+        <section id="emergency-sos" class="content-section hidden">
+            <div class="bg-gradient-to-br from-red-50 to-orange-100 rounded-2xl shadow-xl p-8 border border-red-200">
+                <div class="text-center mb-8">
+                    <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-red-500 to-orange-600 rounded-full mb-4 shadow-lg transform hover:scale-110 transition-transform duration-300">
+                        <i class="fas fa-exclamation-triangle text-3xl text-white"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold mb-2 bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">
+                        Emergency SOS
+                    </h2>
+                    <p class="text-gray-600">Get immediate help in emergencies</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-xl shadow-lg p-6 text-center">
+                        <div class="w-24 h-24 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-4 transform hover:scale-110 transition-transform duration-300 cursor-pointer" onclick="callEmergencyServices()">
+                            <i class="fas fa-phone-alt text-3xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-red-600 mb-2">Emergency Call</h3>
+                        <p class="text-gray-600 mb-4">Call emergency services immediately</p>
+                        <button onclick="callEmergencyServices()" class="bg-red-500 text-white px-6 py-3 rounded-lg hover:bg-red-600 transition-all duration-300 transform hover:scale-105">
+                            <i class="fas fa-phone-alt mr-2"></i>Call 108
+                        </button>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-lg p-6 text-center">
+                        <div class="w-24 h-24 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4 transform hover:scale-110 transition-transform duration-300 cursor-pointer" onclick="sendEmergencySMS()">
+                            <i class="fas fa-sms text-3xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-orange-600 mb-2">Emergency SMS</h3>
+                        <p class="text-gray-600 mb-4">Send SOS to emergency contacts</p>
+                        <button onclick="sendEmergencySMS()" class="bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600 transition-all duration-300 transform hover:scale-105">
+                            <i class="fas fa-sms mr-2"></i>Send SOS
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="mt-6 bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-semibold mb-4 text-center text-gray-800">
+                        <i class="fas fa-map-marker-alt mr-2 text-red-500"></i>
+                        Emergency Location
+                    </h3>
+                    <div id="emergencyLocation" class="text-center py-4">
+                        <i class="fas fa-location-arrow text-4xl text-gray-400 mb-3"></i>
+                        <p class="text-gray-500">Getting your location...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Appointment Booking Section -->
+        <section id="appointment" class="content-section hidden">
+            <div class="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-2xl shadow-xl p-8 border border-blue-200">
+                <div class="text-center mb-8">
+                    <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full mb-4 shadow-lg transform hover:scale-110 transition-transform duration-300">
+                        <i class="fas fa-calendar-check text-3xl text-white"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                        Appointment Booking
+                    </h2>
+                    <p class="text-gray-600">Book appointments with healthcare providers</p>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                    <h3 class="text-xl font-semibold mb-6 text-center text-gray-800 flex items-center justify-center">
+                        <i class="fas fa-user-md mr-3 text-blue-500"></i>
+                        Book Your Appointment
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input type="text" id="patientName" placeholder="Patient Name" class="p-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <input type="tel" id="patientPhone" placeholder="Phone Number" class="p-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <select id="doctorType" class="p-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="">Select Doctor Type</option>
+                            <option value="general">General Physician</option>
+                            <option value="cardiologist">Cardiologist</option>
+                            <option value="pediatrician">Pediatrician</option>
+                            <option value="gynecologist">Gynecologist</option>
+                            <option value="orthopedic">Orthopedic</option>
+                            <option value="dermatologist">Dermatologist</option>
+                        </select>
+                        <input type="date" id="appointmentDate" class="p-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <input type="time" id="appointmentTime" class="p-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <textarea id="appointmentReason" placeholder="Reason for visit" rows="3" class="p-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                    </div>
+                    <button onclick="bookAppointment()" class="w-full mt-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 transform hover:scale-[1.02] shadow-xl font-semibold">
+                        <i class="fas fa-calendar-plus mr-2"></i>Book Appointment
+                    </button>
+                </div>
+                
+                <div id="appointmentList" class="mt-6">
+                    <div class="text-center text-gray-500 py-8">
+                        <i class="fas fa-calendar-alt text-4xl mb-3"></i>
+                        <p>No appointments booked yet</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Health Assistant Section -->
+        <section id="health-assistant" class="content-section hidden">
+            <div class="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-2xl shadow-xl p-8 border border-blue-200">
+                <div class="text-center mb-8">
+                    <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full mb-4 shadow-lg transform hover:scale-110 transition-transform duration-300">
+                        <i class="fas fa-robot text-3xl text-white"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                        AI Health Assistant
+                    </h2>
+                    <p class="text-gray-600">Get intelligent health analysis powered by AI</p>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                    <h3 class="text-xl font-semibold mb-6 text-center text-gray-800 flex items-center justify-center">
+                        <i class="fas fa-stethoscope mr-3 text-blue-500"></i>
+                        Describe Your Symptoms
+                    </h3>
+                    <div class="space-y-6">
+                        <div class="relative">
+                            <textarea id="symptoms" rows="4" placeholder="Please describe your symptoms in detail..." 
+                                      class="w-full p-4 border-2 border-blue-200 rounded-xl focus:ring-4 focus:ring-blue-500 focus:border-transparent text-gray-700 resize-none transition-all duration-300 text-lg"></textarea>
+                            <div class="absolute top-2 right-2">
+                                <span class="text-xs text-gray-500 bg-blue-100 px-2 py-1 rounded-full">
+                                    <i class="fas fa-microphone mr-1"></i>Voice Input
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            <button onclick="addSymptom('fever')" class="symptom-btn group relative overflow-hidden bg-gradient-to-r from-red-400 to-red-500 text-white py-3 px-4 rounded-xl hover:from-red-500 hover:to-red-600 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                                <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+                                <i class="fas fa-thermometer-half mr-2 relative z-10"></i>
+                                <span class="relative z-10 font-semibold">Fever</span>
+                            </button>
+                            <button onclick="addSymptom('headache')" class="symptom-btn group relative overflow-hidden bg-gradient-to-r from-yellow-400 to-orange-500 text-white py-3 px-4 rounded-xl hover:from-yellow-500 hover:to-orange-600 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                                <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+                                <i class="fas fa-head-side-virus mr-2 relative z-10"></i>
+                                <span class="relative z-10 font-semibold">Headache</span>
+                            </button>
+                            <button onclick="addSymptom('cough')" class="symptom-btn group relative overflow-hidden bg-gradient-to-r from-orange-400 to-red-500 text-white py-3 px-4 rounded-xl hover:from-orange-500 hover:to-red-600 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                                <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+                                <i class="fas fa-lungs mr-2 relative z-10"></i>
+                                <span class="relative z-10 font-semibold">Cough</span>
+                            </button>
+                            <button onclick="addSymptom('fatigue')" class="symptom-btn group relative overflow-hidden bg-gradient-to-r from-purple-400 to-indigo-500 text-white py-3 px-4 rounded-xl hover:from-purple-500 hover:to-indigo-600 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                                <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+                                <i class="fas fa-tired mr-2 relative z-10"></i>
+                                <span class="relative z-10 font-semibold">Fatigue</span>
+                            </button>
+                        </div>
+                        
+                        <button onclick="analyzeSymptomsWithAPI()" class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-4 rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 transform hover:scale-[1.02] shadow-xl font-semibold text-lg relative overflow-hidden group">
+                            <div class="absolute inset-0 bg-gradient-to-r from-white via-transparent to-white opacity-0 group-hover:opacity-20 transition-opacity duration-500"></div>
+                            <i class="fas fa-stethoscope mr-3 relative z-10"></i>
+                            <span class="relative z-10">Analyze Symptoms with AI</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="symptomResults" class="mt-8 hidden">
+                    <div class="bg-gradient-to-r from-green-50 to-blue-50 rounded-xl p-6 border border-green-200">
+                        <h4 class="text-2xl font-bold mb-4 text-center text-gray-800 flex items-center justify-center">
+                            <i class="fas fa-robot mr-3 text-green-500"></i>
+                            AI Analysis Results
+                        </h4>
+                        <div id="resultsContent" class="space-y-4">
+                            <!-- Results will be displayed here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Doctor Finder Section -->
+        <section id="doctor-finder" class="content-section hidden">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800">
+                <i class="fas fa-user-md mr-2 text-purple-600"></i>
+                Find Nearby Doctors & Hospitals
+            </h2>
+            
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="space-y-4">
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <input type="text" id="locationInput" placeholder="Enter your location or use current location" 
+                               class="flex-1 p-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                        <button onclick="getCurrentLocation()" class="bg-purple-500 text-white px-6 py-3 rounded-lg hover:bg-purple-600 transition">
+                            <i class="fas fa-location-arrow mr-2"></i>Use Current Location
+                        </button>
+                        <button onclick="searchDoctors()" class="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition">
+                            <i class="fas fa-search mr-2"></i>Search
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                        <button onclick="filterDoctors('hospital')" class="filter-btn bg-blue-100 text-blue-700 py-2 px-4 rounded-lg hover:bg-blue-200 transition">
+                            <i class="fas fa-hospital mr-2"></i>Hospitals
+                        </button>
+                        <button onclick="filterDoctors('clinic')" class="filter-btn bg-green-100 text-green-700 py-2 px-4 rounded-lg hover:bg-green-200 transition">
+                            <i class="fas fa-clinic-medical mr-2"></i>Clinics
+                        </button>
+                        <button onclick="filterDoctors('pharmacy')" class="filter-btn bg-orange-100 text-orange-700 py-2 px-4 rounded-lg hover:bg-orange-200 transition">
+                            <i class="fas fa-pills mr-2"></i>Pharmacies
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="doctorResults" class="mt-6">
+                    <div class="text-center text-gray-500 py-8">
+                        <i class="fas fa-map-marked-alt text-4xl mb-3"></i>
+                        <p>Search for nearby healthcare facilities</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Medicine Lookup Section -->
+        <section id="medicine" class="content-section hidden">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800">
+                <i class="fas fa-pills mr-2 text-orange-600"></i>
+                Medicine Information
+            </h2>
+            
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="space-y-4">
+                    <div class="flex gap-4">
+                        <input type="text" id="medicineSearch" placeholder="Search for medicine name..." 
+                               class="flex-1 p-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                        <button onclick="searchMedicine()" class="bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600 transition">
+                            <i class="fas fa-search mr-2"></i>Search
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="medicineResults" class="mt-6">
+                    <div class="text-center text-gray-500 py-8">
+                        <i class="fas fa-capsules text-4xl mb-3"></i>
+                        <p>Search for medicine information</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Health Records Section -->
+        <section id="records" class="content-section hidden">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800">
+                <i class="fas fa-folder-open mr-2 text-indigo-600"></i>
+                Health Records
+            </h2>
+            
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold text-gray-700">Patient Information</h3>
+                    <button onclick="showAddRecordForm()" class="bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-600 transition">
+                        <i class="fas fa-plus mr-2"></i>Add Record
+                    </button>
+                </div>
+                
+                <div id="addRecordForm" class="hidden space-y-4 mb-6 p-4 bg-gray-50 rounded-lg">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input type="text" id="patientName" placeholder="Patient Name" class="p-2 border rounded-lg">
+                        <input type="number" id="patientAge" placeholder="Age" class="p-2 border rounded-lg">
+                        <select id="bloodGroup" class="p-2 border rounded-lg">
+                            <option value="">Select Blood Group</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                        </select>
+                        <input type="text" id="emergencyContact" placeholder="Emergency Contact" class="p-2 border rounded-lg">
+                    </div>
+                    <textarea id="medicalHistory" rows="3" placeholder="Medical History" class="w-full p-2 border rounded-lg"></textarea>
+                    <div class="flex gap-2">
+                        <button onclick="saveHealthRecord()" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">
+                            <i class="fas fa-save mr-2"></i>Save
+                        </button>
+                        <button onclick="hideAddRecordForm()" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="recordsList" class="space-y-4">
+                    <!-- Records will be displayed here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Government Schemes Section -->
+        <section id="schemes" class="content-section hidden">
+            <div class="text-center mb-8">
+                <h2 class="text-4xl font-bold mb-2 bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
+                    <i class="fas fa-hand-holding-heart mr-3"></i>
+                    Government Health Schemes
+                </h2>
+                <p class="text-gray-600 text-lg">Empowering rural healthcare with government initiatives</p>
+            </div>
+            
+            <div class="bg-gradient-to-br from-white to-pink-50 rounded-2xl shadow-xl p-8 border border-pink-200">
+                <div class="space-y-6">
+                    <div class="text-center mb-6">
+                        <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-green-500 to-blue-600 rounded-full mb-4 shadow-lg transform hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-hand-holding-heart text-3xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800">Available Schemes</h3>
+                        <p class="text-gray-600 mt-2">Browse government healthcare programs</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Scheme Card 1 -->
+                        <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border border-gray-200">
+                            <div class="flex items-center mb-4">
+                                <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white mr-4">
+                                    <i class="fas fa-shield-alt text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-bold text-gray-800">Ayushman Bharat</h4>
+                                    <p class="text-sm text-gray-600">Health coverage up to ₹5 lakh</p>
+                                    <div class="flex items-center mt-2 space-x-4">
+                                        <span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full">Active</span>
+                                        <span class="text-xs text-gray-500">For BPL families</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Scheme Card 2 -->
+                        <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border border-gray-200">
+                            <div class="flex items-center mb-4">
+                                <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-white mr-4">
+                                    <i class="fas fa-baby text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-bold text-gray-800">Pradhan Mantri Surakshit Matritva</h4>
+                                    <p class="text-sm text-gray-600">Free antenatal check-ups</p>
+                                    <div class="flex items-center mt-2 space-x-4">
+                                        <span class="bg-purple-100 text-purple-700 text-xs px-2 py-1 rounded-full">Monthly</span>
+                                        <span class="text-xs text-gray-500">For pregnant women</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Scheme Card 3 -->
+                        <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border border-gray-200">
+                            <div class="flex items-center mb-4">
+                                <div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center text-white mr-4">
+                                    <i class="fas fa-hospital text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-bold text-gray-800">National Health Protection</h4>
+                                    <p class="text-sm text-gray-600">Comprehensive insurance</p>
+                                    <div class="flex items-center mt-2 space-x-4">
+                                        <span class="bg-orange-100 text-orange-700 text-xs px-2 py-1 rounded-full">New</span>
+                                        <span class="text-xs text-gray-500">For poor families</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Enhanced Search Bar -->
+                        <div class="col-span-full">
+                            <div class="relative mb-6">
+                                <input type="text" 
+                                       id="schemeSearch" 
+                                       placeholder="Search schemes by name, category, or benefits..." 
+                                       oninput="filterSchemes()"
+                                       autocomplete="off"
+                                       class="w-full px-4 py-3 pr-12 border-2 border-pink-200 rounded-xl focus:ring-4 focus:ring-pink-500 focus:border-transparent transition-all duration-300 text-base md:text-lg shadow-sm hover:shadow-md focus:shadow-lg">
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+                                    <i class="fas fa-search text-pink-400 text-lg"></i>
+                                </div>
+                                <!-- Clear button (shown when there's text) -->
+                                <button type="button" 
+                                        id="clearSearch" 
+                                        onclick="clearSchemeSearch()" 
+                                        class="absolute inset-y-0 right-0 flex items-center pr-12 text-gray-400 hover:text-gray-600 transition-colors hidden"
+                                        aria-label="Clear search">
+                                    <i class="fas fa-times-circle text-lg"></i>
+                                </button>
+                            </div>
+                            <!-- Search suggestions/hints -->
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="text-xs text-gray-500">Popular searches:</span>
+                                <button onclick="setSearchTerm('insurance')" class="text-xs bg-pink-100 text-pink-700 px-2 py-1 rounded-full hover:bg-pink-200 transition-colors">Insurance</button>
+                                <button onclick="setSearchTerm('maternal')" class="text-xs bg-pink-100 text-pink-700 px-2 py-1 rounded-full hover:bg-pink-200 transition-colors">Maternal</button>
+                                <button onclick="setSearchTerm('child')" class="text-xs bg-pink-100 text-pink-700 px-2 py-1 rounded-full hover:bg-pink-200 transition-colors">Child</button>
+                                <button onclick="setSearchTerm('elderly')" class="text-xs bg-pink-100 text-pink-700 px-2 py-1 rounded-full hover:bg-pink-200 transition-colors">Elderly</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Schemes List Container -->
+                    <div id="schemesList" class="mt-8">
+                        <!-- Schemes will be loaded here by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Emergency Modal -->
+    <div id="emergencyModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg max-w-md w-full p-6">
+            <h3 class="text-xl font-bold mb-4 text-red-600">
+                <i class="fas fa-exclamation-triangle mr-2"></i>
+                Emergency Mode
+            </h3>
+            <div class="space-y-4">
+                <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <h4 class="font-semibold mb-2">Emergency Numbers</h4>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span>Ambulance:</span>
+                            <a href="tel:108" class="font-bold text-red-600">108</a>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Emergency:</span>
+                            <a href="tel:112" class="font-bold text-red-600">112</a>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Women Helpline:</span>
+                            <a href="tel:1091" class="font-bold text-red-600">1091</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <button onclick="findNearestHospital()" class="w-full bg-red-500 text-white py-3 rounded-lg hover:bg-red-600 transition">
+                    <i class="fas fa-hospital mr-2"></i>Find Nearest Hospital
+                </button>
+                
+                <button onclick="closeEmergencyMode()" class="w-full bg-gray-500 text-white py-3 rounded-lg hover:bg-gray-600 transition">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>

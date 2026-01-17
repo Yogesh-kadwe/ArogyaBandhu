@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard - ArogyaBandhu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-blue-600 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-heartbeat text-white text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold">ArogyaBandhu</h1>
+                    <p class="text-xs opacity-75">Doctor Dashboard</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="text-right">
+                    <div class="text-sm" id="userName">Loading...</div>
+                    <div class="text-xs opacity-75">Doctor</div>
+                </div>
+                <button onclick="logout()" class="bg-blue-700 px-3 py-1 rounded-lg text-sm hover:bg-blue-800 transition">
+                    <i class="fas fa-sign-out-alt mr-1"></i>Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Quick Actions -->
+    <div class="bg-white shadow-sm border-b">
+        <div class="container mx-auto p-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <button onclick="showSection('appointments')" class="bg-blue-100 text-blue-700 p-3 rounded-lg hover:bg-blue-200 transition text-center">
+                    <i class="fas fa-calendar-check text-xl mb-1 block"></i>
+                    <span class="text-xs">Appointments</span>
+                </button>
+                <button onclick="showSection('patients')" class="bg-green-100 text-green-700 p-3 rounded-lg hover:bg-green-200 transition text-center">
+                    <i class="fas fa-users text-xl mb-1 block"></i>
+                    <span class="text-xs">Patients</span>
+                </button>
+                <button onclick="showSection('prescriptions')" class="bg-purple-100 text-purple-700 p-3 rounded-lg hover:bg-purple-200 transition text-center">
+                    <i class="fas fa-prescription text-xl mb-1 block"></i>
+                    <span class="text-xs">Prescriptions</span>
+                </button>
+                <button onclick="showSection('analytics')" class="bg-orange-100 text-orange-700 p-3 rounded-lg hover:bg-orange-200 transition text-center">
+                    <i class="fas fa-chart-line text-xl mb-1 block"></i>
+                    <span class="text-xs">Analytics</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container mx-auto p-4">
+        <!-- Doctor Overview -->
+        <section id="doctor-overview" class="mb-6">
+            <h2 class="text-xl font-bold mb-4 text-gray-800">
+                <i class="fas fa-user-md mr-2 text-blue-600"></i>
+                Practice Overview
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">Today's Appointments</p>
+                            <p class="text-xl font-bold text-gray-800">8</p>
+                        </div>
+                        <i class="fas fa-calendar-day text-3xl text-blue-500"></i>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">Total Patients</p>
+                            <p class="text-xl font-bold text-gray-800">156</p>
+                        </div>
+                        <i class="fas fa-users text-3xl text-green-500"></i>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">Pending Reports</p>
+                            <p class="text-xl font-bold text-gray-800">3</p>
+                        </div>
+                        <i class="fas fa-file-medical text-3xl text-purple-500"></i>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">This Month</p>
+                            <p class="text-xl font-bold text-gray-800">₹45,000</p>
+                        </div>
+                        <i class="fas fa-rupee-sign text-3xl text-orange-500"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Appointments Section -->
+        <section id="appointments" class="content-section mb-6">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold text-gray-700">
+                        <i class="fas fa-calendar-check mr-2"></i>
+                        Today's Appointments
+                    </h3>
+                    <button onclick="addAppointment()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition text-sm">
+                        <i class="fas fa-plus mr-2"></i>Add Appointment
+                    </button>
+                </div>
+                
+                <div id="appointmentsList" class="space-y-3">
+                    <!-- Appointments will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Patients Section -->
+        <section id="patients" class="content-section hidden mb-6">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold text-gray-700">
+                        <i class="fas fa-users mr-2"></i>
+                        Patient Records
+                    </h3>
+                    <div class="flex gap-2">
+                        <input type="text" id="patientSearch" placeholder="Search patients..." 
+                               class="p-2 border rounded-lg text-sm">
+                        <button onclick="searchPatients()" class="bg-green-500 text-white px-3 py-2 rounded-lg hover:bg-green-600 transition text-sm">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        <button onclick="addPatient()" class="bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-600 transition text-sm">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="patientsList" class="overflow-x-auto">
+                    <!-- Patients will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Prescriptions Section -->
+        <section id="prescriptions" class="content-section hidden mb-6">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold text-gray-700">
+                        <i class="fas fa-prescription mr-2"></i>
+                        Recent Prescriptions
+                    </h3>
+                    <button onclick="createPrescription()" class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition text-sm">
+                        <i class="fas fa-plus mr-2"></i>New Prescription
+                    </button>
+                </div>
+                
+                <div id="prescriptionsList" class="space-y-3">
+                    <!-- Prescriptions will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Analytics Section -->
+        <section id="analytics" class="content-section hidden mb-6">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">
+                    <i class="fas fa-chart-line mr-2"></i>
+                    Practice Analytics
+                </h3>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-medium mb-3">Patient Visits - Last 7 Days</h4>
+                        <canvas id="visitsChart" width="400" height="200"></canvas>
+                    </div>
+                    <div>
+                        <h4 class="font-medium mb-3">Common Conditions</h4>
+                        <canvas id="conditionsChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Add Appointment Modal -->
+    <div id="appointmentModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg max-w-md w-full p-6">
+            <h3 class="text-xl font-bold mb-4">Add Appointment</h3>
+            <div class="space-y-4">
+                <input type="text" id="patientName" placeholder="Patient Name" class="w-full p-2 border rounded-lg">
+                <input type="tel" id="patientPhone" placeholder="Phone Number" class="w-full p-2 border rounded-lg">
+                <input type="date" id="appointmentDate" class="w-full p-2 border rounded-lg">
+                <input type="time" id="appointmentTime" class="w-full p-2 border rounded-lg">
+                <select id="appointmentType" class="w-full p-2 border rounded-lg">
+                    <option value="">Select Type</option>
+                    <option value="consultation">Consultation</option>
+                    <option value="followup">Follow-up</option>
+                    <option value="emergency">Emergency</option>
+                    <option value="checkup">Regular Checkup</option>
+                </select>
+                <textarea id="appointmentNotes" placeholder="Notes" rows="3" class="w-full p-2 border rounded-lg"></textarea>
+                
+                <div class="flex gap-2">
+                    <button onclick="saveAppointment()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
+                        Save
+                    </button>
+                    <button onclick="closeAppointmentModal()" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="doctor-dashboard.js"></script>
+</body>
+</html>

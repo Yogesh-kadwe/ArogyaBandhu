@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - ArogyaBandhu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-gray-800 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-heartbeat text-white text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold">ArogyaBandhu Admin</h1>
+                    <p class="text-xs opacity-75">Admin Dashboard</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="text-right">
+                    <div class="text-sm" id="userName">Loading...</div>
+                    <div class="text-xs opacity-75">Administrator</div>
+                </div>
+                <button onclick="logout()" class="bg-gray-700 px-3 py-1 rounded-lg text-sm hover:bg-gray-600 transition">
+                    <i class="fas fa-sign-out-alt mr-1"></i>Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Quick Actions -->
+    <div class="bg-white shadow-sm border-b">
+        <div class="container mx-auto p-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <button onclick="showSection('overview')" class="bg-gray-100 text-gray-700 p-3 rounded-lg hover:bg-gray-200 transition text-center">
+                    <i class="fas fa-tachometer-alt text-xl mb-1 block"></i>
+                    <span class="text-xs">Overview</span>
+                </button>
+                <button onclick="showSection('users')" class="bg-blue-100 text-blue-700 p-3 rounded-lg hover:bg-blue-200 transition text-center">
+                    <i class="fas fa-users text-xl mb-1 block"></i>
+                    <span class="text-xs">Users</span>
+                </button>
+                <button onclick="showSection('reports')" class="bg-green-100 text-green-700 p-3 rounded-lg hover:bg-green-200 transition text-center">
+                    <i class="fas fa-chart-line text-xl mb-1 block"></i>
+                    <span class="text-xs">Reports</span>
+                </button>
+                <button onclick="showSection('settings')" class="bg-purple-100 text-purple-700 p-3 rounded-lg hover:bg-purple-200 transition text-center">
+                    <i class="fas fa-cog text-xl mb-1 block"></i>
+                    <span class="text-xs">Settings</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container mx-auto p-4">
+        <!-- System Overview -->
+        <section id="overview" class="mb-6">
+            <h2 class="text-xl font-bold mb-4 text-gray-800">
+                <i class="fas fa-tachometer-alt mr-2 text-gray-600"></i>
+                System Overview
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">Total Users</p>
+                            <p class="text-xl font-bold text-gray-800">1,247</p>
+                        </div>
+                        <i class="fas fa-users text-3xl text-blue-500"></i>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">Active Patients</p>
+                            <p class="text-xl font-bold text-gray-800">856</p>
+                        </div>
+                        <i class="fas fa-user-injured text-3xl text-green-500"></i>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">Health Workers</p>
+                            <p class="text-xl font-bold text-gray-800">45</p>
+                        </div>
+                        <i class="fas fa-user-nurse text-3xl text-purple-500"></i>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">Appointments Today</p>
+                            <p class="text-xl font-bold text-gray-800">124</p>
+                        </div>
+                        <i class="fas fa-calendar-check text-3xl text-orange-500"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Additional Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">Blood Donors</p>
+                            <p class="text-xl font-bold text-gray-800">234</p>
+                        </div>
+                        <i class="fas fa-tint text-3xl text-red-500"></i>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">Emergency Requests</p>
+                            <p class="text-xl font-bold text-gray-800">18</p>
+                        </div>
+                        <i class="fas fa-phone-alt text-3xl text-red-600"></i>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">Vaccinations</p>
+                            <p class="text-xl font-bold text-gray-800">567</p>
+                        </div>
+                        <i class="fas fa-syringe text-3xl text-teal-500"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Users Management -->
+        <section id="users" class="content-section hidden mb-6">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold text-gray-700">
+                        <i class="fas fa-users mr-2"></i>
+                        User Management
+                    </h3>
+                    <button onclick="addUser()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition text-sm">
+                        <i class="fas fa-plus mr-2"></i>Add User
+                    </button>
+                </div>
+                
+                <!-- User Type Tabs -->
+                <div class="flex space-x-2 mb-4">
+                    <button onclick="filterUsers('all')" class="user-tab px-4 py-2 rounded-lg bg-gray-200 text-gray-700">All Users</button>
+                    <button onclick="filterUsers('patient')" class="user-tab px-4 py-2 rounded-lg hover:bg-gray-200">Patients</button>
+                    <button onclick="filterUsers('doctor')" class="user-tab px-4 py-2 rounded-lg hover:bg-gray-200">Doctors</button>
+                    <button onclick="filterUsers('asha')" class="user-tab px-4 py-2 rounded-lg hover:bg-gray-200">ASHA Workers</button>
+                    <button onclick="filterUsers('pregnant')" class="user-tab px-4 py-2 rounded-lg hover:bg-gray-200">Pregnant Women</button>
+                </div>
+                
+                <div id="usersList" class="overflow-x-auto">
+                    <!-- Users will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Reports Section -->
+        <section id="reports" class="content-section hidden mb-6">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">
+                    <i class="fas fa-chart-line mr-2"></i>
+                    System Reports
+                </h3>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-medium mb-3">User Registration Trends</h4>
+                        <canvas id="userGrowthChart" width="400" height="200"></canvas>
+                    </div>
+                    <div>
+                        <h4 class="font-medium mb-3">Service Usage</h4>
+                        <canvas id="usageChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+                
+                <div class="mt-6">
+                    <h4 class="font-medium mb-3">Quick Reports</h4>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <button onclick="generateReport('users')" class="p-4 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition">
+                            <i class="fas fa-users text-blue-500 text-xl mb-2"></i>
+                            <p class="text-sm font-medium">User Report</p>
+                        </button>
+                        <button onclick="generateReport('health')" class="p-4 bg-green-50 border border-green-200 rounded-lg hover:bg-green-100 transition">
+                            <i class="fas fa-heartbeat text-green-500 text-xl mb-2"></i>
+                            <p class="text-sm font-medium">Health Report</p>
+                        </button>
+                        <button onclick="generateReport('appointments')" class="p-4 bg-purple-50 border border-purple-200 rounded-lg hover:bg-purple-100 transition">
+                            <i class="fas fa-calendar-check text-purple-500 text-xl mb-2"></i>
+                            <p class="text-sm font-medium">Appointment Report</p>
+                        </button>
+                        <button onclick="generateReport('emergency')" class="p-4 bg-red-50 border border-red-200 rounded-lg hover:bg-red-100 transition">
+                            <i class="fas fa-phone-alt text-red-500 text-xl mb-2"></i>
+                            <p class="text-sm font-medium">Emergency Report</p>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Settings Section -->
+        <section id="settings" class="content-section hidden mb-6">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">
+                    <i class="fas fa-cog mr-2"></i>
+                    System Settings
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-medium mb-3">General Settings</h4>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">System Name</label>
+                                <input type="text" value="ArogyaBandhu" class="w-full p-2 border rounded-lg">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Contact Email</label>
+                                <input type="email" value="admin@arogyabandhu.org" class="w-full p-2 border rounded-lg">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Emergency Number</label>
+                                <input type="tel" value="108" class="w-full p-2 border rounded-lg">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-medium mb-3">Notification Settings</h4>
+                        <div class="space-y-3">
+                            <label class="flex items-center">
+                                <input type="checkbox" checked class="mr-2">
+                                <span>Email Notifications</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" checked class="mr-2">
+                                <span>SMS Alerts</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" checked class="mr-2">
+                                <span>Emergency Alerts</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="mr-2">
+                                <span>Weekly Reports</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6">
+                    <button onclick="saveSettings()" class="bg-gray-800 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition">
+                        <i class="fas fa-save mr-2"></i>Save Settings
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Add User Modal -->
+    <div id="userModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg max-w-md w-full p-6">
+            <h3 class="text-xl font-bold mb-4">Add New User</h3>
+            <div class="space-y-4">
+                <input type="text" id="newUserName" placeholder="Full Name" class="w-full p-2 border rounded-lg">
+                <input type="email" id="newUserEmail" placeholder="Email Address" class="w-full p-2 border rounded-lg">
+                <input type="tel" id="newUserPhone" placeholder="Phone Number" class="w-full p-2 border rounded-lg">
+                <select id="newUserRole" class="w-full p-2 border rounded-lg">
+                    <option value="">Select Role</option>
+                    <option value="patient">Patient</option>
+                    <option value="doctor">Doctor</option>
+                    <option value="asha">ASHA Worker</option>
+                    <option value="pregnant">Pregnant Woman</option>
+                </select>
+                <input type="text" id="newUserLocation" placeholder="Location/Village" class="w-full p-2 border rounded-lg">
+                
+                <div class="flex gap-2">
+                    <button onclick="saveNewUser()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
+                        Save
+                    </button>
+                    <button onclick="closeUserModal()" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="admin-dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Donor Finder - ArogyaBandhu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Google Maps API -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&libraries=places"></script>
+    
+    <style>
+        #map {
+            height: 500px;
+            width: 100%;
+            border-radius: 0.5rem;
+        }
+        
+        .donor-card {
+            transition: all 0.3s ease;
+        }
+        
+        .donor-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .blood-group-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-weight: bold;
+            font-size: 0.875rem;
+        }
+        
+        .bg-a-positive { background-color: #ef4444; color: white; }
+        .bg-a-negative { background-color: #dc2626; color: white; }
+        .bg-b-positive { background-color: #3b82f6; color: white; }
+        .bg-b-negative { background-color: #2563eb; color: white; }
+        .bg-o-positive { background-color: #10b981; color: white; }
+        .bg-o-negative { background-color: #059669; color: white; }
+        .bg-ab-positive { background-color: #8b5cf6; color: white; }
+        .bg-ab-negative { background-color: #7c3aed; color: white; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-red-600 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-heartbeat text-white text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold">ArogyaBandhu</h1>
+                    <p class="text-xs opacity-75">Blood Donor Finder</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button onclick="goBack()" class="bg-red-700 px-3 py-1 rounded-lg text-sm hover:bg-red-800 transition">
+                    <i class="fas fa-arrow-left mr-1"></i>Back
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto p-4">
+        <!-- Search Section -->
+        <section class="mb-6">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-bold mb-4 text-gray-800">
+                    <i class="fas fa-search mr-2 text-red-600"></i>
+                    Find Blood Donors Near You
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Blood Group</label>
+                        <select id="bloodGroup" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                            <option value="">All Blood Groups</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="location" placeholder="Enter location" 
+                                   class="flex-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                            <button onclick="getCurrentLocation()" class="bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-600 transition">
+                                <i class="fas fa-location-arrow"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Distance (km)</label>
+                        <select id="distance" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                            <option value="5">Within 5 km</option>
+                            <option value="10">Within 10 km</option>
+                            <option value="25">Within 25 km</option>
+                            <option value="50">Within 50 km</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="flex gap-2">
+                    <button onclick="searchDonors()" class="bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600 transition">
+                        <i class="fas fa-search mr-2"></i>Search Donors
+                    </button>
+                    <button onclick="registerAsDonor()" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition">
+                        <i class="fas fa-plus mr-2"></i>Register as Donor
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Donors List -->
+            <section>
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-lg font-semibold mb-4 text-gray-700">
+                        <i class="fas fa-users mr-2"></i>
+                        Available Donors
+                        <span id="donorCount" class="text-sm text-gray-500 ml-2">(0 found)</span>
+                    </h3>
+                    
+                    <div id="donorsList" class="space-y-3 max-h-96 overflow-y-auto">
+                        <!-- Donors will be loaded here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Map Section -->
+            <section>
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-lg font-semibold mb-4 text-gray-700">
+                        <i class="fas fa-map-marked-alt mr-2"></i>
+                        Donor Locations
+                    </h3>
+                    <div id="map"></div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Emergency Request Section -->
+        <section class="mt-6">
+            <div class="bg-red-50 border border-red-200 rounded-lg p-6">
+                <h3 class="text-lg font-semibold mb-4 text-red-700">
+                    <i class="fas fa-exclamation-triangle mr-2"></i>
+                    Emergency Blood Request
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Patient Name</label>
+                        <input type="text" id="patientName" placeholder="Enter patient name" 
+                               class="w-full p-2 border border-gray-300 rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Hospital</label>
+                        <input type="text" id="hospital" placeholder="Hospital name" 
+                               class="w-full p-2 border border-gray-300 rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Required Blood Group</label>
+                        <select id="requiredBloodGroup" class="w-full p-2 border border-gray-300 rounded-lg">
+                            <option value="">Select Blood Group</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Contact Number</label>
+                        <input type="tel" id="contactNumber" placeholder="Contact number" 
+                               class="w-full p-2 border border-gray-300 rounded-lg">
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Urgency Level</label>
+                    <div class="flex gap-4">
+                        <label class="flex items-center">
+                            <input type="radio" name="urgency" value="normal" class="mr-2">
+                            <span>Normal (within 24 hours)</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="radio" name="urgency" value="urgent" class="mr-2">
+                            <span>Urgent (within 6 hours)</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="radio" name="urgency" value="critical" class="mr-2">
+                            <span>Critical (immediate)</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <button onclick="submitEmergencyRequest()" class="mt-4 bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition">
+                    <i class="fas fa-paper-plane mr-2"></i>Send Emergency Request
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Donor Registration Modal -->
+    <div id="donorModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg max-w-md w-full p-6">
+            <h3 class="text-xl font-bold mb-4">Register as Blood Donor</h3>
+            <div class="space-y-4">
+                <input type="text" id="donorName" placeholder="Full Name" class="w-full p-2 border rounded-lg">
+                <input type="tel" id="donorPhone" placeholder="Phone Number" class="w-full p-2 border rounded-lg">
+                <input type="email" id="donorEmail" placeholder="Email Address" class="w-full p-2 border rounded-lg">
+                <select id="donorBloodGroup" class="w-full p-2 border rounded-lg">
+                    <option value="">Select Blood Group</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                </select>
+                <input type="date" id="lastDonation" placeholder="Last Donation Date" class="w-full p-2 border rounded-lg">
+                <textarea id="donorAddress" placeholder="Address" rows="3" class="w-full p-2 border rounded-lg"></textarea>
+                
+                <div class="flex gap-2">
+                    <button onclick="saveDonorRegistration()" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">
+                        Register
+                    </button>
+                    <button onclick="closeDonorModal()" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="blood-donor.js"></script>
+</body>
+</html>

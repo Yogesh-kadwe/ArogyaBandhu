@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArogyaBandhu - 3D Healthcare Experience</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+            position: relative;
+            height: 100vh;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* 3D Scene Container */
+        .hero-3d-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1500px;
+        }
+
+        .hero-3d-scene {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            animation: sceneFloat 8s ease-in-out infinite;
+        }
+
+        @keyframes sceneFloat {
+            0%, 100% { transform: rotateX(5deg) rotateY(0deg) scale(1); }
+            50% { transform: rotateX(5deg) rotateY(90deg) scale(1); }
+        }
+
+        /* 3D Human Anatomy Visualization */
+        .human-anatomy {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 400px;
+            transform-style: preserve-3d;
+            animation: anatomyRotate 30s linear infinite;
+        }
+
+        @keyframes anatomyRotate {
+            from { transform: translate(-50%, -50%) rotateY(0deg); }
+            to { transform: translate(-50%, -50%) rotateY(360deg); }
+        }
+
+        .anatomy-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            opacity: 0.9;
+        }
+
+        .skeleton-layer {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            border: 2px solid rgba(255,255,255,0.3);
+            transform: translateZ(0px);
+        }
+
+        .organ-layer {
+            background: linear-gradient(135deg, rgba(239,68,68,0.3) 0%, rgba(59,130,246,0.3) 100%);
+            border: 2px solid rgba(59,130,246,0.5);
+            transform: translateZ(20px);
+            animation: organPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes organPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        .vessel-layer {
+            background: linear-gradient(135deg, rgba(239,68,68,0.2) 0%, rgba(34,197,94,0.2) 100%);
+            border: 2px solid rgba(34,197,94,0.4);
+            transform: translateZ(40px);
+            animation: vesselFlow 2s linear infinite;
+        }
+
+        @keyframes vesselFlow {
+            from { opacity: 0.2; }
+            to { opacity: 0.5; }
+        }
+
+        /* Health Statistics Orbs */
+        .health-orb {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+            text-align: center;
+            transform-style: preserve-3d;
+            animation: orbFloat 4s ease-in-out infinite;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .health-orb:hover {
+            transform: scale(1.2) translateZ(20px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        @keyframes orbFloat {
+            0%, 100% { transform: translateY(0px) rotateX(10deg); }
+            50% { transform: translateY(-20px) rotateX(0deg); }
+        }
+
+        .orb-heart {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            top: 20%;
+            right: 15%;
+            animation-delay: 0s;
+        }
+
+        .orb-brain {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            top: 15%;
+            left: 15%;
+            animation-delay: 0.5s;
+        }
+
+        .orb-lungs {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            top: 40%;
+            right: 10%;
+            animation-delay: 1s;
+        }
+
+        .orb-stomach {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            top: 60%;
+            left: 20%;
+            animation-delay: 1.5s;
+        }
+
+        .orb-immune {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            top: 35%;
+            left: 25%;
+            animation-delay: 2s;
+        }
+
+        /* Floating Tablet Interface */
+        .floating-tablet {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 300px;
+            background: linear-gradient(145deg, #1a1a1a 0%, #2d2d2d 100%);
+            border-radius: 20px;
+            box-shadow: 
+                0 30px 60px rgba(0,0,0,0.5),
+                0 15px 30px rgba(0,0,0,0.3),
+                0 8px 15px rgba(0,0,0,0.2),
+                inset 0 2px 5px rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            overflow: hidden;
+            animation: tabletFloat 6s ease-in-out infinite;
+            z-index: 100;
+        }
+
+        @keyframes tabletFloat {
+            0%, 100% { transform: translate(-50%, -50%) translateY(0px) rotateX(2deg); }
+            50% { transform: translate(-50%, -50%) translateY(-30px) rotateX(0deg); }
+        }
+
+        .tablet::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.05) 50%, transparent 70%);
+            animation: shimmer 4s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .tablet-screen {
+            width: 360px;
+            height: 260px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 15px;
+            margin: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        /* Interactive Elements */
+        .interactive-zone {
+            position: absolute;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .interactive-zone:hover {
+            background: rgba(255,255,255,0.1);
+            transform: scale(1.1);
+        }
+
+        .zone-heart {
+            width: 60px;
+            height: 60px;
+            top: 30%;
+            left: 40%;
+            background: radial-gradient(circle, rgba(239,68,68,0.3) 0%, transparent 70%);
+        }
+
+        .zone-brain {
+            width: 50px;
+            height: 50px;
+            top: 20%;
+            left: 25%;
+            background: radial-gradient(circle, rgba(59,130,246,0.3) 0%, transparent 70%);
+        }
+
+        .zone-lungs {
+            width: 70px;
+            height: 50px;
+            top: 45%;
+            right: 30%;
+            background: radial-gradient(circle, rgba(16,185,129,0.3) 0%, transparent 70%);
+        }
+
+        /* Particle Effects */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255,255,255,0.8);
+            border-radius: 50%;
+            animation: particleFloat 10s linear infinite;
+        }
+
+        @keyframes particleFloat {
+            from {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            to {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Loading Screen */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-content {
+            text-align: center;
+            color: white;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top: 3px solid #10b981;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Health Metrics Display */
+        .health-metrics {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 30px;
+            background: rgba(0,0,0,0.7);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .metric {
+            text-align: center;
+            color: white;
+        }
+
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .human-anatomy {
+                width: 200px;
+                height: 300px;
+            }
+            
+            .floating-tablet {
+                width: 300px;
+                height: 250px;
+            }
+            
+            .tablet-screen {
+                width: 260px;
+                height: 210px;
+            }
+            
+            .health-orb {
+                width: 60px;
+                height: 60px;
+                font-size: 10px;
+            }
+            
+            .health-metrics {
+                flex-direction: column;
+                gap: 15px;
+                bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h2 class="text-2xl font-bold mb-2">Initializing ArogyaBandhu</h2>
+            <p class="text-sm opacity-75">Loading 3D Healthcare Experience...</p>
+        </div>
+    </div>
+
+    <!-- 3D Hero Scene -->
+    <div class="hero-3d-container">
+        <div class="hero-3d-scene">
+            <!-- 3D Human Anatomy -->
+            <div class="human-anatomy">
+                <div class="anatomy-layer skeleton-layer"></div>
+                <div class="anatomy-layer organ-layer"></div>
+                <div class="anatomy-layer vessel-layer"></div>
+                
+                <!-- Interactive Zones -->
+                <div class="interactive-zone zone-heart" onclick="showOrganInfo('heart')" title="Heart Health"></div>
+                <div class="interactive-zone zone-brain" onclick="showOrganInfo('brain')" title="Brain Health"></div>
+                <div class="interactive-zone zone-lungs" onclick="showOrganInfo('lungs')" title="Lung Health"></div>
+            </div>
+
+            <!-- Health Statistics Orbs -->
+            <div class="health-orb orb-heart" onclick="showHealthStats('heart')">
+                <div>
+                    <i class="fas fa-heartbeat text-2xl mb-1"></i>
+                    <div>Heart Rate</div>
+                    <div class="text-xs">72 bpm</div>
+                </div>
+            </div>
+
+            <div class="health-orb orb-brain" onclick="showHealthStats('brain')">
+                <div>
+                    <i class="fas fa-brain text-2xl mb-1"></i>
+                    <div>Brain Activity</div>
+                    <div class="text-xs">Normal</div>
+                </div>
+            </div>
+
+            <div class="health-orb orb-lungs" onclick="showHealthStats('lungs')">
+                <div>
+                    <i class="fas fa-lungs text-2xl mb-1"></i>
+                    <div>Lung Capacity</div>
+                    <div class="text-xs">95%</div>
+                </div>
+            </div>
+
+            <div class="health-orb orb-stomach" onclick="showHealthStats('stomach')">
+                <div>
+                    <i class="fas fa-stomach text-2xl mb-1"></i>
+                    <div>Digestion</div>
+                    <div class="text-xs">Good</div>
+                </div>
+            </div>
+
+            <div class="health-orb orb-immune" onclick="showHealthStats('immune')">
+                <div>
+                    <i class="fas fa-shield-virus text-2xl mb-1"></i>
+                    <div>Immunity</div>
+                    <div class="text-xs">Strong</div>
+                </div>
+            </div>
+
+            <!-- Floating Tablet Interface -->
+            <div class="floating-tablet">
+                <div class="tablet-screen">
+                    <div class="p-6 h-full flex flex-col justify-center items-center text-white">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-heartbeat text-4xl mb-2"></i>
+                            <h1 class="text-2xl font-bold">ArogyaBandhu</h1>
+                            <p class="text-sm opacity-90">3D Healthcare Experience</p>
+                        </div>
+                        
+                        <div class="w-full space-y-3">
+                            <button onclick="enterApp()" class="w-full bg-white bg-opacity-20 backdrop-blur text-white py-3 px-4 rounded-lg hover:bg-opacity-30 transition-all duration-300 transform hover:scale-105 border border-white border-opacity-30">
+                                <i class="fas fa-sign-in-alt mr-2"></i>
+                                Enter Healthcare Portal
+                            </button>
+                            
+                            <button onclick="exploreAnatomy()" class="w-full bg-white bg-opacity-10 backdrop-blur text-white py-2 px-4 rounded-lg hover:bg-opacity-20 transition-all duration-300 text-sm">
+                                <i class="fas fa-atom mr-2"></i>
+                                Explore 3D Anatomy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Health Metrics Display -->
+            <div class="health-metrics">
+                <div class="metric">
+                    <div class="metric-value">1.2M</div>
+                    <div class="metric-label">Lives Impacted</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">98%</div>
+                    <div class="metric-label">Accuracy Rate</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">24/7</div>
+                    <div class="metric-label">Availability</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Particle Effects -->
+    <div id="particleContainer"></div>
+
+    <!-- Organ Information Modal -->
+    <div id="organModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl p-6 max-w-md w-full">
+            <h3 id="organTitle" class="text-xl font-bold mb-4"></h3>
+            <div id="organContent" class="text-gray-700"></div>
+            <button onclick="closeOrganModal()" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition w-full">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize 3D Experience
+        class Health3DExperience {
+            constructor() {
+                this.particles = [];
+                this.organs = {
+                    heart: {
+                        title: 'Heart Health Monitor',
+                        content: 'Real-time cardiac monitoring with ECG analysis. Track heart rate variability, blood pressure, and detect early signs of cardiovascular issues.',
+                        stats: { rate: '72 bpm', variability: 'Normal', pressure: '120/80' }
+                    },
+                    brain: {
+                        title: 'Neural Activity Scanner',
+                        content: 'Advanced EEG analysis for brain health monitoring. Detect patterns, stress levels, and cognitive performance indicators.',
+                        stats: { activity: 'Normal', stress: 'Low', sleep: 'Good' }
+                    },
+                    lungs: {
+                        title: 'Respiratory Health Tracker',
+                        content: 'Comprehensive lung function analysis with oxygen saturation monitoring and respiratory rate tracking.',
+                        stats: { capacity: '95%', oxygen: '98%', rate: '16 bpm' }
+                    },
+                    stomach: {
+                        title: 'Digestive System Analysis',
+                        content: 'Monitor digestive health, nutrient absorption, and detect gastrointestinal issues early.',
+                        stats: { health: 'Good', metabolism: 'Normal', enzymes: 'Balanced' }
+                    },
+                    immune: {
+                        title: 'Immune System Strength',
+                        content: 'Track immune response, antibody levels, and overall immune system resilience.',
+                        stats: { strength: 'Strong', response: 'Fast', antibodies: 'Optimal' }
+                    }
+                };
+                this.initializeExperience();
+            }
+
+            initializeExperience() {
+                this.createParticles();
+                this.setupInteractions();
+                this.startAnimations();
+                this.hideLoadingScreen();
+            }
+
+            createParticles() {
+                const container = document.getElementById('particleContainer');
+                for (let i = 0; i < 20; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.animationDelay = Math.random() * 10 + 's';
+                    particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+                    container.appendChild(particle);
+                    this.particles.push(particle);
+                }
+            }
+
+            setupInteractions() {
+                // Mouse movement effect
+                document.addEventListener('mousemove', (e) => {
+                    const scene = document.querySelector('.hero-3d-scene');
+                    const x = (e.clientX / window.innerWidth - 0.5) * 20;
+                    const y = (e.clientY / window.innerHeight - 0.5) * 20;
+                    
+                    scene.style.transform = `rotateX(${5 + y}deg) rotateY(${x}deg)`;
+                });
+
+                // Touch support for mobile
+                document.addEventListener('touchmove', (e) => {
+                    const touch = e.touches[0];
+                    const scene = document.querySelector('.hero-3d-scene');
+                    const x = (touch.clientX / window.innerWidth - 0.5) * 20;
+                    const y = (touch.clientY / window.innerHeight - 0.5) * 20;
+                    
+                    scene.style.transform = `rotateX(${5 + y}deg) rotateY(${x}deg)`;
+                });
+            }
+
+            startAnimations() {
+                // Animate health metrics
+                setInterval(() => {
+                    this.updateHealthMetrics();
+                }, 5000);
+
+                // Pause anatomy rotation on hover
+                let autoRotate = true;
+                const anatomy = document.querySelector('.human-anatomy');
+                
+                if (anatomy) {
+                    anatomy.addEventListener('mouseenter', () => {
+                        autoRotate = false;
+                        anatomy.style.animationPlayState = 'paused';
+                    });
+                    
+                    anatomy.addEventListener('mouseleave', () => {
+                        autoRotate = true;
+                        anatomy.style.animationPlayState = 'running';
+                    });
+                }
+            }
+
+            updateHealthMetrics() {
+                const metrics = document.querySelectorAll('.metric-value');
+                metrics.forEach(metric => {
+                    const currentValue = metric.textContent;
+                    const variation = (Math.random() - 0.5) * 0.1;
+                    
+                    if (currentValue.includes('%')) {
+                        const baseValue = parseFloat(currentValue);
+                        const newValue = Math.max(85, Math.min(100, baseValue + variation * 10));
+                        metric.textContent = newValue.toFixed(0) + '%';
+                    } else if (currentValue.includes('bpm')) {
+                        const baseValue = parseFloat(currentValue);
+                        const newValue = Math.max(60, Math.min(100, baseValue + variation * 5));
+                        metric.textContent = Math.round(newValue) + ' bpm';
+                    }
+                });
+            }
+
+            hideLoadingScreen() {
+                setTimeout(() => {
+                    const overlay = document.getElementById('loadingOverlay');
+                    overlay.style.opacity = '0';
+                    setTimeout(() => {
+                        overlay.style.display = 'none';
+                    }, 500);
+                }, 2000);
+            }
+
+            showOrganInfo(organ) {
+                const modal = document.getElementById('organModal');
+                const title = document.getElementById('organTitle');
+                const content = document.getElementById('organContent');
+                
+                const organData = this.organs[organ];
+                if (organData) {
+                    title.textContent = organData.title;
+                    
+                    let statsHtml = '<div class="mt-4 space-y-2">';
+                    for (const [key, value] of Object.entries(organData.stats)) {
+                        const formattedKey = key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1');
+                        statsHtml += `
+                            <div class="flex justify-between items-center p-2 bg-gray-50 rounded">
+                                <span class="font-medium">${formattedKey}:</span>
+                                <span class="text-blue-600 font-bold">${value}</span>
+                            </div>
+                        `;
+                    }
+                    statsHtml += '</div>';
+                    
+                    content.innerHTML = `
+                        <p>${organData.content}</p>
+                        ${statsHtml}
+                        <div class="mt-4 p-3 bg-blue-50 rounded-lg">
+                            <p class="text-sm text-blue-700">
+                                <i class="fas fa-info-circle mr-2"></i>
+                                Click on the 3D anatomy model to explore real-time health monitoring
+                            </p>
+                        </div>
+                    `;
+                    
+                    modal.classList.remove('hidden');
+                }
+            }
+
+            enterApp() {
+                // Stop animations before redirect
+                const anatomy = document.querySelector('.human-anatomy');
+                const scene = document.querySelector('.hero-3d-scene');
+                const particles = document.querySelectorAll('.particle');
+                
+                if (anatomy) {
+                    anatomy.style.animationPlayState = 'paused';
+                }
+                if (scene) {
+                    scene.style.animationPlayState = 'paused';
+                }
+                particles.forEach(particle => {
+                    particle.style.animationPlayState = 'paused';
+                });
+                
+                // Show loading state
+                const loadingDiv = document.createElement('div');
+                loadingDiv.className = 'fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center';
+                loadingDiv.innerHTML = `
+                    <div class="text-white text-center">
+                        <div class="text-2xl font-bold mb-2">Loading ArogyaBandhu...</div>
+                        <div class="text-sm opacity-75">Preparing your healthcare dashboard</div>
+                    </div>
+                `;
+                document.body.appendChild(loadingDiv);
+                
+                // Redirect to login
+                setTimeout(() => {
+                    window.location.href = 'auth.html';
+                }, 1000);
+            }
+
+            exploreAnatomy() {
+                // Hide tablet and show full anatomy with pause
+                const tablet = document.querySelector('.floating-tablet');
+                const anatomy = document.querySelector('.human-anatomy');
+                
+                if (tablet) {
+                    tablet.style.transform = 'translate(-50%, -50%) scale(0.8) translateY(100px)';
+                }
+                if (anatomy) {
+                    anatomy.style.animationPlayState = 'paused';
+                    anatomy.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                }
+                
+                // Resume after 3 seconds
+                setTimeout(() => {
+                    if (tablet) {
+                        tablet.style.transform = 'translate(-50%, -50%) scale(1) translateY(0px)';
+                    }
+                    if (anatomy) {
+                        anatomy.style.animationPlayState = 'running';
+                        anatomy.style.transform = 'translate(-50%, -50%) scale(1)';
+                    }
+                }, 3000);
+            }
+        }
+
+        // Global functions
+        let health3D;
+
+        function showOrganInfo(organ) {
+            health3D.showOrganInfo(organ);
+        }
+
+        function showHealthStats(type) {
+            // Enhanced interaction with health orbs
+            const orbs = document.querySelectorAll('.health-orb');
+            orbs.forEach(orb => orb.style.transform = 'scale(1)');
+            
+            event.currentTarget.style.transform = 'scale(1.3)';
+            
+            // Show detailed stats
+            setTimeout(() => {
+                event.currentTarget.style.transform = 'scale(1)';
+            }, 500);
+        }
+
+        function closeOrganModal() {
+            document.getElementById('organModal').classList.add('hidden');
+        }
+
+        function enterApp() {
+            health3D.enterApp();
+        }
+
+        function exploreAnatomy() {
+            health3D.exploreAnatomy();
+        }
+
+        // Initialize on load
+        window.addEventListener('load', () => {
+            health3D = new Health3DExperience();
+        });
+
+        // Handle keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                enterApp();
+            } else if (e.key === 'Escape') {
+                closeOrganModal();
+            }
+        });
+    </script>
+</body>
+</html>

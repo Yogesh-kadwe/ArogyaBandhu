@@ -1,0 +1,22 @@
+{
+  "name": "ArogyaBandhu",
+  "short_name": "ArogyaBandhu",
+  "description": "AI-powered healthcare platform for rural communities",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#10b981",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiBmaWxsPSIjMTBiOTgxIi8+CjxwYXRoIGQ9Ik05NiA0OEM3Ni4zIDQ4IDYwIDY0LjMgNjAgODRDNjAgMTAzLjcgNzYuMyAxMjAgOTYgMTIwQzExNS43IDEyMCAxMzIgMTAzLjcgMTMyIDg0QzEzMiA2NC4zIDExNS43IDQ4IDk2IDQ4WiIgZmlsbD0id2hpdGUiLz4KPGNpcmNsZSBjeD0iODAiIGN5PSI3NiIgcj0iOCIgZmlsbD0iIzEwYjk4MSIvPgo8Y2lyY2xlIGN4PSIxMTIiIGN5PSI3NiIgcj0iOCIgZmlsbD0iIzEwYjk4MSIvPgo8cGF0aCBkPSJNOTYgOTJDOTAuNSA5MiA4NiA5Ni41IDg2IDEwMkM4NiAxMDcuNSA5MC41IDExMiA5NiAxMTJDMTAxLjUgMTEyIDEwNiAxMDcuNSAxMDYgMTAyQzEwNiA5Ni41IDEwMS41IDkyIDk2IDkyWiIgZmlsbD0iIzEwYjk4MSIvPgo8L3N2Zz4K",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiBmaWxsPSIjMTBiOTgxIi8+CjxwYXRoIGQ9Ik0yNTYgMTI4QzIwMy4yIDEyOCAxNjAgMTcxLjIgMTYwIDIyNEMxNjAgMjc2LjggMjAzLjIgMzIwIDI1NiAzMjBDMzA4LjggMzIwIDM1MiAyNzYuOCAzNTIgMjI0QzM1MiAxNzEuMiAzMDguOCAxMjggMjU2IDEyOFoiIGZpbGw9IndoaXRlIi8+CjxjaXJjbGUgY3g9IjIxMyIgY3k9IjIwNCIgcj0iMjEiIGZpbGw9IiMxMGI5ODEiLz4KPGNpcmNsZSBjeD0iMjk5IiBjeT0iMjA0IiByPSIyMSIgZmlsbD0iIzEwYjk4MSIvPgo8cGF0aCBkPSJNMjU2IDI0NEMyMzkuNSAyNDQgMjI2IDI1Ny41IDIyNiAyNzRDMjI2IDI5MC41IDIzOS41IDMwNCAyNTYgMzA0QzI3Mi41IDMwNCAyODYgMjkwLjUgMjg2IDI3NEMyODYgMjU3LjUgMjcyLjUgMjQ0IDI1NiAyNDRaIiBmaWxsPSIjMTBiOTgxIi8+Cjwvc3ZnPgo=",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}

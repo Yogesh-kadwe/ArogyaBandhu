@@ -1,0 +1,409 @@
+/* Additional custom styles for ArogyaBandhu */
+
+/* Dark mode support */
+.dark {
+    background-color: #1a202c;
+    color: #e2e8f0;
+}
+
+.dark .bg-white {
+    background-color: #2d3748;
+}
+
+.dark .bg-gray-50 {
+    background-color: #2d3748;
+}
+
+.dark .text-gray-800 {
+    color: #e2e8f0;
+}
+
+.dark .text-gray-700 {
+    color: #e2e8f0;
+}
+
+.dark .text-gray-600 {
+    color: #cbd5e0;
+}
+
+.dark .border {
+    border-color: #4a5568;
+}
+
+/* Enhanced mobile responsiveness */
+@media (max-width: 640px) {
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    .text-xl {
+        font-size: 1.25rem;
+    }
+    
+    .text-2xl {
+        font-size: 1.5rem;
+    }
+    
+    .p-6 {
+        padding: 1rem;
+    }
+    
+    .space-y-4 > * + * {
+        margin-top: 1rem;
+    }
+}
+
+/* Rural-friendly large touch targets */
+@media (pointer: coarse) {
+    button, .nav-btn, .symptom-btn, .filter-btn {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    input, textarea, select {
+        min-height: 44px;
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+}
+
+/* Loading animations */
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: #3b82f6;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Smooth transitions */
+* {
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+/* Enhanced focus states for accessibility */
+button:focus, input:focus, textarea:focus, select:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    body {
+        font-size: 12pt;
+        line-height: 1.4;
+    }
+    
+    .bg-white, .bg-gray-50 {
+        background: white !important;
+        color: black !important;
+    }
+    
+    .border {
+        border: 1px solid #ccc !important;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .border {
+        border-width: 2px;
+    }
+    
+    button {
+        border: 2px solid currentColor;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Enhanced AI Health Assistant Styles */
+.symptom-btn {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    transform-style: preserve-3d;
+}
+
+.symptom-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.symptom-btn:hover::before {
+    left: 100%;
+}
+
+.symptom-btn:hover {
+    transform: translateY(-3px) rotateX(5deg);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* Enhanced textarea styling */
+#symptoms {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border: 2px solid #e2e8f0;
+    position: relative;
+}
+
+#symptoms:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+}
+
+/* Voice input indicator */
+.voice-input-indicator {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+/* AI Results styling */
+#symptomResults {
+    animation: slideInUp 0.5s ease;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Enhanced result cards */
+.result-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.result-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Loading animation for AI analysis */
+.analyzing {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #3b82f6;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Emergency pulse animation enhancement */
+.emergency-pulse {
+    animation: pulse 2s infinite, glow 2s infinite;
+}
+
+@keyframes glow {
+    0% { box-shadow: 0 0 5px rgba(239, 68, 68, 0.5); }
+    50% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.8); }
+    100% { box-shadow: 0 0 5px rgba(239, 68, 68, 0.5); }
+}
+
+/* Success message styling */
+.success-message {
+    background-color: #10b981;
+    color: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Error message styling */
+.error-message {
+    background-color: #ef4444;
+    color: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* Offline indicator enhancement */
+.offline-banner {
+    background: linear-gradient(90deg, #fbbf24, #f59e0b);
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+/* Chart container responsiveness */
+.chart-container {
+    position: relative;
+    height: 300px;
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .chart-container {
+        height: 250px;
+    }
+}
+
+/* Health metric cards */
+.health-metric-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.health-metric-card h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.875rem;
+    opacity: 0.9;
+}
+
+.health-metric-card .value {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.health-metric-card .unit {
+    font-size: 0.875rem;
+    opacity: 0.8;
+}
+
+/* Symptom button enhancements */
+.symptom-btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.symptom-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.symptom-btn:active::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* Language switcher styling */
+.language-switcher {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* PWA install prompt styling */
+.pwa-install-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    padding: 1rem;
+    text-align: center;
+    z-index: 1000;
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+/* Accessibility improvements */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Focus visible for better keyboard navigation */
+.focus-visible:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}

@@ -1,0 +1,38 @@
+{
+  "name": "arogyabandhu",
+  "version": "1.0.0",
+  "description": "AI-powered healthcare platform for rural communities",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "dev": "python -m http.server 8000",
+    "build": "echo 'Build complete - static files ready'",
+    "serve": "npx serve .",
+    "preview": "npx serve . -p 3000"
+  },
+  "keywords": [
+    "healthcare",
+    "rural",
+    "ai",
+    "medical",
+    "pwa",
+    "offline",
+    "healthcare-platform"
+  ],
+  "author": "ArogyaBandhu Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/arogyabandhu/healthcare-platform"
+  },
+  "bugs": {
+    "url": "https://github.com/arogyabandhu/healthcare-platform/issues"
+  },
+  "homepage": "https://github.com/arogyabandhu/healthcare-platform#readme",
+  "devDependencies": {
+    "serve": "^14.0.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
